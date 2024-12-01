@@ -1,0 +1,18 @@
+[package]
+org = "sarani"
+name = "secret_santa_app"
+version = "0.1.0"
+distribution = "2201.6.0-20230525-070000-e36fc7ac"
+
+[build-options]
+observabilityIncluded = true
+
+[[dependency]]
+org = "ballerinax"
+name = "googleapis.sheets"
+version = "3.5.1"
+
+[[dependency]]
+org = "ballerinax"
+name = "googleapis.gmail"
+version = "4.0.1"
