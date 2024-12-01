@@ -27,7 +27,7 @@ The **Secret Santa Application** is a Ballerina-based tool that automates organi
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/secret-santa-app.git
+   git clone https://github.com/sm1990/secret-santa-app.git
    cd secret-santa-app
    ```
 
