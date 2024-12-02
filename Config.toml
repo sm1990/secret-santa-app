@@ -1,0 +1,3 @@
+authToken = "<YOUR_AUTH_TOKEN>"
+spreadsheetId = "<YOUR_SPREADSHEET_ID>"
+sheetName = "<YOUR_SHEET_NAME>"

@@ -3,9 +3,9 @@ import ballerina/time;
 import ballerinax/googleapis.gmail;
 import ballerinax/googleapis.sheets;
 
-configurable string authToken = "<YOUR_AUTH_TOKEN>";
-configurable string spreadsheetId = "<YOUR_SPREADSHEET_ID>";
-configurable string sheetName = "<YOUR_SHEET_NAME>";
+configurable string authToken = ?;
+configurable string spreadsheetId = ?;
+configurable string sheetName = ?;
 
 type Participant record {
     string name;
