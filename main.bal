@@ -7,11 +7,11 @@ configurable string authToken = ?;
 configurable string spreadsheetId = ?;
 configurable string sheetName = ?;
 
-type Participant record {
+type Participant record {|
     string name;
     string email;
     string wishList;
-};
+|};
 
 sheets:Client sheetsClient = check new ({
     auth: {
