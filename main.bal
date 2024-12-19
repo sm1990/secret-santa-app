@@ -34,14 +34,12 @@ public function main() returns error? {
             return range;
         }
 
-        Participant[] participants = [];
-        foreach var row in range.values {
-            participants.push({
-                name: row[0].toString(),
-                email: row[1].toString(),
-                wishList: row[2].toString()
-            });
-        }
+        Participant[] participants = from var row in range.values
+                         select {
+                         name: row[0].toString(),
+                         email: row[1].toString(),
+                         wishList: row[2].toString()
+                         };
 
         Participant[] shuffledParticipants = shuffle(participants);
 
@@ -86,13 +84,12 @@ public function main() returns error? {
 function shuffle(Participant[] arr) returns Participant[] {
     int seed = time:utcNow()[0]; // Use current time as seed
     int n = arr.length();
-    while (n > 1) {
-        n -= 1;
-        int k = (seed % (n + 1)).abs();
+    foreach int index in int:range(n - 1, 0, -1) {
+        int k = (seed % (index + 1)).abs();
         seed = (seed * 1103515245 + 12345) % 2147483648; // Linear congruential generator
         Participant temp = arr[k];
-        arr[k] = arr[n];
-        arr[n] = temp;
+        arr[k] = arr[index];
+        arr[index] = temp;
     }
     return arr;
 }
