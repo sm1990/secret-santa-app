@@ -47,7 +47,7 @@ public function main() returns error? {
             Participant currentParticipant = shuffledParticipants[i];
             Participant recipient = shuffledParticipants[(i + 1) % shuffledParticipants.length()];
 
-            string emailBody = string `
+            xml emailBody = xml `
     <html>
     <body>
     <h1>Secret Santa - 2024 🎅🎄</h1>
@@ -64,7 +64,7 @@ public function main() returns error? {
             gmail:MessageRequest emailMessage = {
                 to: [currentParticipant.email],
                 subject: "Secret Santa - 2024",
-                bodyInHtml: emailBody
+                bodyInHtml: emailBody.toString()
             };
 
             gmail:Message|error sendResult = gmailClient->/users/me/messages/send.post(emailMessage);
