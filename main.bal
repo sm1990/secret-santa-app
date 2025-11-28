@@ -3,9 +3,12 @@ import ballerina/time;
 import ballerinax/googleapis.gmail;
 import ballerinax/googleapis.sheets;
 
-configurable string authToken = ?;
+configurable string googleRefreshToken = ?;
+configurable string googleClientId = ?;
+configurable string googleClientSecret = ?;
 configurable string spreadsheetId = ?;
 configurable string sheetName = ?;
+configurable string sheetsLink = ?;
 
 type Participant record {|
     string name;
@@ -15,13 +18,18 @@ type Participant record {|
 
 sheets:Client sheetsClient = check new ({
     auth: {
-        token: authToken
+        refreshToken: googleRefreshToken,
+        clientId: googleClientId,
+        clientSecret: googleClientSecret,
+        refreshUrl: sheets:REFRESH_URL
     }
 });
 
 gmail:Client gmailClient = check new ({
     auth: {
-        token: authToken
+        refreshToken: googleRefreshToken,
+        clientId: googleClientId,
+        clientSecret: googleClientSecret
     }
 });
 
@@ -43,39 +51,29 @@ public function main() returns error? {
 
         Participant[] shuffledParticipants = shuffle(participants);
 
+        string[] mappings = [];
+
         foreach int i in 0 ..< shuffledParticipants.length() {
             Participant currentParticipant = shuffledParticipants[i];
             Participant recipient = shuffledParticipants[(i + 1) % shuffledParticipants.length()];
 
-            xml emailBody = xml `
-    <html>
-    <body>
-    <h1>Secret Santa - 2024 🎅🎄</h1>
-    <p>This year you will be ${recipient.name}'s Secret Santa.</p>
-    <p>His/Her wish list is:</p>
-    <p>${recipient.wishList}</p>
-    <p>Please handover your gift by 19th December 2024.</p>
-    <p>If not you'll end up in the naughty list :D</p>
-    <p>Thank you.</p>
-    </body>
-    </html>
-    `;
-
             gmail:MessageRequest emailMessage = {
                 to: [currentParticipant.email],
-                subject: "Secret Santa - 2024",
-                bodyInHtml: emailBody.toString()
+                'from: "Secret Santa Ballerina <zenitsukmtsu@gmail.com>",
+                subject: "Secret Santa - 2025",
+                bodyInHtml: getEmailBody(recipient.name)
             };
-
+            mappings.push(currentParticipant.email + " is the Secret Santa of " + recipient.email);
             gmail:Message|error sendResult = gmailClient->/users/me/messages/send.post(emailMessage);
             if sendResult is error {
                 io:println("Failed to send email to ", currentParticipant.email, ": ", sendResult.message());
             } else {
                 io:println("Email sent successfully to ", currentParticipant.email);
             }
-
         }
 
+        io:println("Mappings");
+        io:println(mappings.toString());
     } on fail var e {
         return e;
     }
